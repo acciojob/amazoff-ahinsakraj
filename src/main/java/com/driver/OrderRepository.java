@@ -35,6 +35,8 @@ public class OrderRepository {
             list.add(orderId);
             pairMap.put(partnerId, list);
         }
+        DeliveryPartner deliveryPartner = partnerMap.get(partnerId);
+        deliveryPartner.setNumberOfOrders(pairMap.get(partnerId).size());
     }
 
     public Order getOrderById(String orderId) {
@@ -72,7 +74,7 @@ public class OrderRepository {
         } else {
             int ans = 0;
             for(String order : orderMap.keySet()) {
-                if(value(orderMap.get(order).getDeliveryTime()) > value(time)) {
+                if(orderMap.get(order).getDeliveryTime() > value(time)) {
                     ans++;
                 }
             }
@@ -87,9 +89,9 @@ public class OrderRepository {
             int lastTime = 0;
             String ans = "";
             for(String order : orderMap.keySet()) {
-                if(value(orderMap.get(order).getDeliveryTime()) > lastTime) {
-                    lastTime = value(orderMap.get(order).getDeliveryTime());
-                    ans = orderMap.get(order).getDeliveryTime();
+                if(orderMap.get(order).getDeliveryTime() > lastTime) {
+                    lastTime = orderMap.get(order).getDeliveryTime();
+                    ans = orderMap.get(order).getStringTime();
                 }
             }
             return ans;
@@ -108,6 +110,8 @@ public class OrderRepository {
             for(int i = 0; i < list.size(); i++) {
                 if(list.get(i).equals(orderId)) {
                     list.remove(i);
+                    DeliveryPartner deliveryPartner = partnerMap.get(partnerId);
+                    deliveryPartner.setNumberOfOrders(pairMap.get(partnerId).size());
                     return;
                 }
             }

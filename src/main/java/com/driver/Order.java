@@ -24,8 +24,18 @@ public class Order {
         return id;
     }
 
-    public String getDeliveryTime() {
-
+    public int getDeliveryTime() {
+        return deliveryTime;
+    }
+    public String getStringTime() {
         return stringTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id='" + id + '\'' +
+                ", deliveryTime=" + deliveryTime +
+                '}';
     }
 }
