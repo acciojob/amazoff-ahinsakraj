@@ -7,10 +7,8 @@ import java.util.List;
 
 @Service
 public class OrderService {
-//    @Autowired
-    OrderRepository orderRepository;
-
-
+    //    @Autowired
+    OrderRepository orderRepository = new OrderRepository();
     public void addOrder(Order order) {
         orderRepository.addOrder(order);
     }
@@ -47,12 +45,24 @@ public class OrderService {
         return orderRepository.getCountOfUnassignedOrders();
     }
 
-    public Integer getOrdersLeftAfterGivenTimeByPartnerId(String time, String partnerId) {
-        return orderRepository.getOrdersLeftAfterGivenTimeByPartnerId(time, partnerId);
+    public String getLastDeliveryTimeByPartnerId(String partnerId) {
+        int lastDeliveryTime = orderRepository.getLastDeliveryTimeByPartnerId(partnerId);
+        if(lastDeliveryTime == -1)
+            return null;
+        String MM = String.valueOf(lastDeliveryTime % 60);
+        String HH = String.valueOf(lastDeliveryTime / 60);
+        if(HH.length() < 2)
+            HH = "0" + HH;
+        if(MM.length() < 2)
+            MM = "0" + MM;
+        return (HH + ":" + MM);
     }
 
-    public String getLastDeliveryTimeByPartnerId(String partnerId) {
-        return orderRepository.getLastDeliveryTimeByPartnerId(partnerId);
+    public Integer getOrdersLeftAfterGivenTimeByPartnerId(String time, String partnerId) {
+        int HH = Integer.parseInt(time.substring(0, 2));
+        int MM = Integer.parseInt(time.substring(3, 5));
+        int givenTime  = (HH * 60) + MM;
+        return orderRepository.getOrdersLeftAfterGivenTimeByPartnerId(givenTime, partnerId);
     }
 
     public void deletePartnerById(String partnerId) {
